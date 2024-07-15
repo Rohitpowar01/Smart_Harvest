@@ -18,13 +18,11 @@ $para3 = $row4['admin_password'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_mail'])) {
     $email = $_POST['farmer_email'];
+    $message = $_POST['farmer_message'];
     $res = mysqli_query($conn, "SELECT * FROM farmerlogin WHERE email='$email'");
     $count = mysqli_num_rows($res);
     if ($count > 0) {
-        $otp = rand(11111, 99999);
-        mysqli_query($conn, "UPDATE farmerlogin SET otp='$otp' WHERE email ='$email'");
-        $html = "Your OTP verification code for Smart Harvest is " . $otp;
-        smtp_mailer($email, 'OTP Verification', $html);
+        smtp_mailer($email, 'Message from Smart Harvest', $message);
         echo "Mail sent successfully";
     } else {
         echo "Email does not exist";
@@ -100,7 +98,11 @@ function smtp_mailer($to, $subject, $msg) {
                                     <label for="farmer_email">Farmer Email:</label>
                                     <input type="email" class="form-control" id="farmer_email" name="farmer_email" required>
                                 </div>
-                                <button type="submit" name="send_mail" class="btn btn-primary">Send OTP</button>
+                                <div class="form-group">
+                                    <label for="farmer_message">Message:</label>
+                                    <textarea class="form-control" id="farmer_message" name="farmer_message" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" name="send_mail" class="btn btn-primary">Send Message</button>
                             </form>
                             <table class="table table-striped table-hover table-bordered bg-gradient-white text-center display" id="myTable">
                                 <thead>
